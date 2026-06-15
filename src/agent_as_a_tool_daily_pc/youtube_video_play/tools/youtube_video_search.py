@@ -7,6 +7,10 @@ from autogen_core.tools import FunctionTool
 
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
+# Shared across requests — context is immutable; reading certifi's CA bundle
+# (~1 ms) once at import is far cheaper than doing it per call.
+_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+
 
 async def search_youtube_videos(query: str) -> dict:
     """Search YouTube and return at most ONE video per query.
@@ -27,8 +31,7 @@ async def search_youtube_videos(query: str) -> dict:
         f"part=snippet&type=video&maxResults={max_results}"
         f"&q={urllib.parse.quote(query)}&key={YOUTUBE_API_KEY}"
     )
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
-    connector = aiohttp.TCPConnector(ssl=ssl_context)
+    connector = aiohttp.TCPConnector(ssl=_SSL_CONTEXT)
     async with aiohttp.ClientSession(connector=connector) as session:
         async with session.get(search_url) as resp:
             if resp.status != 200:
