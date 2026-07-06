@@ -1,3 +1,3 @@
-from .team import team as play_team
+from .team import build_play_team
 
-__all__ = ["play_team"]
+__all__ = ["build_play_team"]

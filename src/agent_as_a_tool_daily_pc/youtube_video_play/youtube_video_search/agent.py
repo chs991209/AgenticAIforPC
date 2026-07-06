@@ -1,5 +1,26 @@
 from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
-from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import model_client00, model_client01, model_client02, model_client03, model_client04
+
+from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import (
+    model_client00 as openai_model_client00,
+    model_client01 as openai_model_client01,
+    model_client02 as openai_model_client02,
+    model_client03 as openai_model_client03,
+    model_client04 as openai_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.gemini_models import (
+    gemini_client00 as gemini_model_client00,
+    gemini_client01 as gemini_model_client01,
+    gemini_client02 as gemini_model_client02,
+    gemini_client03 as gemini_model_client03,
+    gemini_client04 as gemini_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.claude_models import (
+    claude_client00 as claude_model_client00,
+    claude_client01 as claude_model_client01,
+    claude_client02 as claude_model_client02,
+    claude_client03 as claude_model_client03,
+    claude_client04 as claude_model_client04,
+)
 from src.agent_as_a_tool_daily_pc.youtube_video_play.tools import search_youtube_videos
 
 # ORIGINAL SYSTEM MESSAGE (kept for reference) — replaced because:
@@ -21,7 +42,8 @@ from src.agent_as_a_tool_daily_pc.youtube_video_play.tools import search_youtube
 
 youtube_video_search_agent = AssistantAgent(
     name="youtube_video_search_agent",
-    model_client=model_client00,
+    # model_client=openai_model_client00,
+    model_client=claude_model_client00,
     tools=[search_youtube_videos],
     system_message="""You search YouTube for every keyword the orchestrator provides. Your ONLY tool is `search_youtube_videos`.
 
@@ -40,6 +62,6 @@ The tool returns: {"query": "...", "videos": [{"videoId": "...", "title": "..."}
 After every tool call has completed, output exactly ONE line containing only:
   youtube_video_url_validate_agent
 
-DO NOT restate, summarize, or reformat the tool results — they are already in the conversation history and the validator will read them directly. DO NOT output `CONTENTGENERATIONDONE`. DO NOT output `{"youtube_urls": ...}`. DO NOT mention the orchestrator's name.
+DO NOT restate, summarize, or reformat the tool results — they are already in the conversation history and the validator will read them directly. DO NOT output `CONTENTGENERATIONDONE`. DO NOT output `{"open_webbrowser": ...}`. DO NOT mention the orchestrator's name.
 """
 )
