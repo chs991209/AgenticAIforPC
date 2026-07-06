@@ -19,16 +19,24 @@ async def search_youtube_videos(query: str) -> dict:
     with an 11-character videoId) are returned. Channel and playlist results
     are dropped.
 
+    Why we request 5 candidates but keep only 1:
+        YouTube's `type=video` filter is not always respected — for queries
+        that strongly match an artist name (e.g. "브루노 마스" for Bruno Mars),
+        the top result is often the artist's channel and our post-filter would
+        drop it, leaving an empty list. Asking for 5 raises the odds that at
+        least one real video makes it through the filter so downstream agents
+        actually get a URL.
+
     Shape:
         {
           "query": "<original query>",
           "videos": [{"videoId": "<11-char id>", "title": "<title>"}]  # length 0 or 1
         }
     """
-    max_results = 1
+    api_max_results = 5
     search_url = (
         "https://www.googleapis.com/youtube/v3/search?"
-        f"part=snippet&type=video&maxResults={max_results}"
+        f"part=snippet&type=video&maxResults={api_max_results}"
         f"&q={urllib.parse.quote(query)}&key={YOUTUBE_API_KEY}"
     )
     connector = aiohttp.TCPConnector(ssl=_SSL_CONTEXT)
@@ -39,7 +47,6 @@ async def search_youtube_videos(query: str) -> dict:
                 raise Exception(f"YouTube search failed: {resp.status} {text}")
             data = await resp.json()
 
-    videos = []
     for item in data.get("items", []):
         item_id = item.get("id") or {}
         if item_id.get("kind") != "youtube#video":
@@ -48,9 +55,9 @@ async def search_youtube_videos(query: str) -> dict:
         if not isinstance(video_id, str) or len(video_id) != 11:
             continue
         title = (item.get("snippet") or {}).get("title", "")
-        videos.append({"videoId": video_id, "title": title})
+        return {"query": query, "videos": [{"videoId": video_id, "title": title}]}
 
-    return {"query": query, "videos": videos}
+    return {"query": query, "videos": []}
 
 
 search_youtube_tool = FunctionTool(

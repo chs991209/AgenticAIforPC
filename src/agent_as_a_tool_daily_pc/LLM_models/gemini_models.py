@@ -32,7 +32,15 @@ def _client(temperature: float) -> OpenAIChatCompletionClient:
     )
 
 
-_VALID_NAMES = {f"gemini_client0{i}": i / 10 for i in range(5)}
+# Explicit temperature mapping — edit a value to retune a specific client without
+# touching the agents that depend on it. Lazy: only the clients you import are built.
+_VALID_NAMES: dict[str, float] = {
+    "gemini_client00": 0.0,
+    "gemini_client01": 0.1,
+    "gemini_client02": 0.2,
+    "gemini_client03": 0.3,
+    "gemini_client04": 0.4,
+}
 
 
 def __getattr__(name: str) -> Any:

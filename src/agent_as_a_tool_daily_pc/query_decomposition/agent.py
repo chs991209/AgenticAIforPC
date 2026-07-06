@@ -1,5 +1,26 @@
 from autogen_agentchat.agents import AssistantAgent
-from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import model_client00, model_client01, model_client02, model_client03, model_client04
+
+from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import (
+    model_client00 as openai_model_client00,
+    model_client01 as openai_model_client01,
+    model_client02 as openai_model_client02,
+    model_client03 as openai_model_client03,
+    model_client04 as openai_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.gemini_models import (
+    gemini_client00 as gemini_model_client00,
+    gemini_client01 as gemini_model_client01,
+    gemini_client02 as gemini_model_client02,
+    gemini_client03 as gemini_model_client03,
+    gemini_client04 as gemini_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.claude_models import (
+    claude_client00 as claude_model_client00,
+    claude_client01 as claude_model_client01,
+    claude_client02 as claude_model_client02,
+    claude_client03 as claude_model_client03,
+    claude_client04 as claude_model_client04,
+)
 
 
 # ORIGINAL SYSTEM MESSAGE (kept for reference) — replaced because:
@@ -34,7 +55,7 @@ from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import model_client00
 
 intent_classifier = AssistantAgent(
     name="IntentWithKeywordsClassifyAgent",
-    model_client=model_client03,
+    model_client=openai_model_client03,
     system_message="""You extract user intents and target keywords from a natural-language prompt.
 
 [INTENTS — closed set, exactly three]

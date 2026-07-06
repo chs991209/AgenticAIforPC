@@ -2,14 +2,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from autogen_agentchat.ui import Console
-# from agents.intent import classify_intents_with_keywords
-# from agents.groupchat import build_agent_teams
-# from agent_utils.groupchat.groupchat_manager import (
-#     extract_final_answer,
-#     format_team_prompt,
-# )
+
 from src.agent_as_a_tool_daily_pc.graph_based_intent_route.intent_router import classify_and_merge_intents
-from src.agent_as_a_tool_daily_pc.agent_teams_prompt_recombinator import format_team_prompt
+from src.agent_as_a_tool_daily_pc.agent_team_prompt_recombinator import format_team_prompt
 from src.agent_as_a_tool_daily_pc.agent_teams_first_depth_layer_generator import build_agent_teams
 from src.agent_as_a_tool_daily_pc.agent_team_action_extractor import extract_final_answer, message_text
 import httpx

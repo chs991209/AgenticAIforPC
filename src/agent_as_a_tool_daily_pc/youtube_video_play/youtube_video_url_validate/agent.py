@@ -1,5 +1,26 @@
 from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
-from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import model_client00, model_client01, model_client02, model_client03, model_client04
+
+from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import (
+    model_client00 as openai_model_client00,
+    model_client01 as openai_model_client01,
+    model_client02 as openai_model_client02,
+    model_client03 as openai_model_client03,
+    model_client04 as openai_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.gemini_models import (
+    gemini_client00 as gemini_model_client00,
+    gemini_client01 as gemini_model_client01,
+    gemini_client02 as gemini_model_client02,
+    gemini_client03 as gemini_model_client03,
+    gemini_client04 as gemini_model_client04,
+)
+from src.agent_as_a_tool_daily_pc.LLM_models.claude_models import (
+    claude_client00 as claude_model_client00,
+    claude_client01 as claude_model_client01,
+    claude_client02 as claude_model_client02,
+    claude_client03 as claude_model_client03,
+    claude_client04 as claude_model_client04,
+)
 
 # ORIGINAL SYSTEM MESSAGE (kept for reference) — replaced because:
 #   - "if videoId is non-unique-id_string" is grammatically and semantically unclear
@@ -19,7 +40,8 @@ from src.agent_as_a_tool_daily_pc.LLM_models.openai_models import model_client00
 
 youtube_video_url_validate_agent = AssistantAgent(
     name="youtube_video_url_validate_agent",
-    model_client=model_client00,
+    # model_client=openai_model_client00,
+    model_client=claude_model_client00,
     system_message="""You collect YouTube watch URLs from the search tool's results.
 
 [INPUT]
@@ -43,7 +65,7 @@ Output exactly two parts, in order:
      If no valid URLs exist, output: []
   2. On a NEW line, the literal string: youtube_video_play_planning_agent
 
-DO NOT output `CONTENTGENERATIONDONE`. DO NOT output `{"youtube_urls": ...}` — that belongs to the orchestrator. DO NOT add commentary or markdown code fences.
+DO NOT output `CONTENTGENERATIONDONE`. DO NOT output `{"open_webbrowser": ...}` — that belongs to the orchestrator. DO NOT add commentary or markdown code fences.
 """
 )
 

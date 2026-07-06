@@ -30,10 +30,16 @@ def _client(temperature: float) -> OpenAIChatCompletionClient:
     )
 
 
-# Lazy attribute access: `from openai_models import model_client03` returns a
-# client built on first reference and cached thereafter. Clients no agent
-# imports are never instantiated.
-_VALID_NAMES = {f"model_client0{i}": i / 10 for i in range(5)}
+# Explicit temperature mapping — edit a value to retune a specific client without
+# touching the agents that depend on it. Lazy attribute access: importing
+# `model_client03` only builds the temp=0.3 client; the others stay uncreated.
+_VALID_NAMES: dict[str, float] = {
+    "model_client00": 0.0,
+    "model_client01": 0.1,
+    "model_client02": 0.2,
+    "model_client03": 0.3,
+    "model_client04": 0.4,
+}
 
 
 def __getattr__(name: str) -> Any:
